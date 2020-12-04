@@ -45,7 +45,7 @@ class BonEvents {
         try{
 
             $this->validateParams();
-            $base_URI = self::getMessageBusBaseURI($this->locale);
+            $base_URI = $this->getMessageBusBaseURI();
 
             Log::info("BaseURI Found: ".$base_URI);
 
@@ -60,7 +60,7 @@ class BonEvents {
             $params['event_name']       = $this->eventName;
             $params['event_object_id']  = $this->eventObjectId;
 
-            $response = $client->request('POST', '/events', $params);
+            $response = $client->request('POST', '/'.$this->locale.'/events', $params);
 
             Log::info("ReesponseCode Found: ".$response->getStatusCode());
 
@@ -140,8 +140,8 @@ class BonEvents {
     /**
      * @return string
      */
-    private function getMessageBusBaseURI($locale) : string{
-        return $this->messageBusBaseURI = env('MESSAGEBUS_BASE_URI')."/".$locale;
+    private function getMessageBusBaseURI() : string{
+        return $this->messageBusBaseURI = env('MESSAGEBUS_BASE_URI')."/";
     }
 
 }
