@@ -8,10 +8,72 @@ use Illuminate\Support\Facades\Log;
 
 class BonEvents {
 
-    public $locale      = null;
-    public $eventName   = null;
-    public $eventObjectId   = null;
+    protected $locale      = null;
+    protected $eventName   = null;
+    protected $eventObjectId   = null;
     protected $messageBusBaseURI;
+
+    /**
+     * @param null $eventName
+     */
+    public function setEventName($eventName)
+    {
+        $this->eventName = $eventName;
+    }
+
+    /**
+     * @param null $eventObjectId
+     */
+    public function setEventObjectId($eventObjectId)
+    {
+        $this->eventObjectId = $eventObjectId;
+    }
+
+    /**
+     * @param null $locale
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+    }
+
+    public function sendEvent(){
+
+        try{
+
+            $this->validateParams();
+            $base_URI = self::getMessageBusBaseURI($this->locale);
+
+            Log::info("BaseURI Found: ".$base_URI);
+
+            $client = new Client([
+                'base_uri' => $base_URI
+            ]);
+
+            if (app()->environment('dev')) {
+                $params['verify'] = false;
+            }
+
+            $params['event_name']       = $this->eventName;
+            $params['event_object_id']  = $this->eventObjectId;
+
+            $response = $client->request('POST', '/events', $params);
+
+            Log::info("ReesponseCode Found: ".$response->getStatusCode());
+
+            if($response->getStatusCode() >= 200 ||
+                $response->getStatusCode() < 300
+            ){
+                return true;
+            }else{
+                return false;
+            }
+
+        }catch (Exception $e){
+            Log::info("Exception discovered ".$e->getMessage());
+        }
+    }
+
 
     /**
      * @param $locale
@@ -20,7 +82,7 @@ class BonEvents {
      * @return bool
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public static function sendEvent($locale, $eventName, $eventObjectId){
+    public static function sendEvent2($locale, $eventName, $eventObjectId){
 
         try{
 
@@ -59,17 +121,14 @@ class BonEvents {
     }
 
     /**
-     * @param $locale
-     * @param $eventName
-     * @param $eventObjectId
      * @return bool
      * @throws Exception
      */
-    protected function validateParams($locale, $eventName, $eventObjectId) : bool {
+    protected function validateParams() : bool {
 
-        if(is_null($locale)){ throw new Exception('Missing parameter Locale'); }
-        if(is_null($eventObjectId)){ throw new Exception('Missing parameter eventObjectId'); }
-        if(is_null($eventName)){ throw new Exception('Missing parameter eventName'); }
+        if(is_null($this->locale)){ throw new Exception('Missing parameter Locale'); }
+        if(is_null($this->eventObjectId)){ throw new Exception('Missing parameter eventObjectId'); }
+        if(is_null($this->eventName)){ throw new Exception('Missing parameter eventName'); }
 
         return true;
 
