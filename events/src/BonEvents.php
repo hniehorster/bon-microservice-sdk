@@ -40,6 +40,10 @@ class BonEvents {
         return $this;
     }
 
+    /**
+     * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function sendEvent(){
 
         try{
@@ -61,52 +65,6 @@ class BonEvents {
             $params['event_object_id']  = $this->eventObjectId;
 
             $response = $client->request('POST', '/'.$this->locale.'/events', $params);
-
-            Log::info("ReesponseCode Found: ".$response->getStatusCode());
-
-            if($response->getStatusCode() >= 200 ||
-                $response->getStatusCode() < 300
-            ){
-                return true;
-            }else{
-                return false;
-            }
-
-        }catch (Exception $e){
-            Log::info("Exception discovered ".$e->getMessage());
-        }
-    }
-
-
-    /**
-     * @param $locale
-     * @param $eventName
-     * @param $eventObjectId
-     * @return bool
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public static function sendEvent2($locale, $eventName, $eventObjectId){
-
-        try{
-
-            self::validateParams($locale, $eventName, $eventObjectId);
-
-            $base_URI = self::getMessageBusBaseURI($locale);
-
-            Log::info("BaseURI Found: ".$base_URI);
-
-            $client = new Client([
-                'base_uri' => $base_URI
-            ]);
-
-            if (app()->environment('dev')) {
-                $params['verify'] = false;
-            }
-
-            $params['event_name']       = $eventName;
-            $params['event_object_id']  = $eventObjectId;
-
-            $response = $client->request('POST', '/events', $params);
 
             Log::info("ReesponseCode Found: ".$response->getStatusCode());
 
