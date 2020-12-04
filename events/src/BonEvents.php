@@ -4,6 +4,7 @@ namespace BonSDK\Events;
 
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class BonEvents {
 
@@ -27,6 +28,8 @@ class BonEvents {
 
             $base_URI = self::getMessageBusBaseURI($locale);
 
+            Log::info("BaseURI Found: ".$base_URI);
+
             $client = new Client([
                 'base_uri' => $base_URI
             ]);
@@ -40,6 +43,8 @@ class BonEvents {
 
             $response = $client->request('POST', '/events', $params);
 
+            Log::info("ReesponseCode Found: ".$response->getStatusCode());
+
             if($response->getStatusCode() >= 200 ||
                 $response->getStatusCode() < 300
             ){
@@ -49,6 +54,7 @@ class BonEvents {
             }
 
         }catch (Exception $e){
+            Log::info("Exception discovered ".$e->getMessage());
         }
     }
 
