@@ -1,0 +1,16 @@
+{
+    "name": "bon/bon-microservice-sdk",
+    "description": "bonapp/events is a PHP library for generating events within the BonApp Environments. The Events are published to the",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^7.1@dev"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hjalte Niehorster",
+            "email": "h.niehorster@hjalding.nl"
+        }
+    ],
+    "minimum-stability": "dev"
+}
