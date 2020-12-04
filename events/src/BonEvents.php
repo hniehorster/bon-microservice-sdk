@@ -19,6 +19,7 @@ class BonEvents {
     public function setEventName($eventName)
     {
         $this->eventName = $eventName;
+        return $this;
     }
 
     /**
@@ -27,6 +28,7 @@ class BonEvents {
     public function setEventObjectId($eventObjectId)
     {
         $this->eventObjectId = $eventObjectId;
+        return $this;
     }
 
     /**
@@ -35,6 +37,7 @@ class BonEvents {
     public function setLocale($locale)
     {
         $this->locale = $locale;
+        return $this;
     }
 
     public function sendEvent(){
