@@ -64,7 +64,7 @@ class BonEvents {
             $params['event_name']       = $this->eventName;
             $params['event_object_id']  = $this->eventObjectId;
 
-            $response = $client->request('POST', '/'.$this->locale.'/events', $params);
+            $response = $client->request('POST', '/'.$this->locale.'/event', $params);
 
             Log::info("ReesponseCode Found: ".$response->getStatusCode());
 
