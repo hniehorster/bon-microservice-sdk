@@ -19,7 +19,7 @@ class BonEvents {
      * @return bool
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public static function sendEvent($locale, $eventName, $eventObjectId) : bool {
+    public static function sendEvent($locale, $eventName, $eventObjectId){
 
         try{
 
