@@ -12,5 +12,10 @@
             "email": "h.niehorster@hjalding.nl"
         }
     ],
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "BonSDK\\Events": "src"
+        }
+    }
 }
