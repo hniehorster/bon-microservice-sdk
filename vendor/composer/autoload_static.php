@@ -25,6 +25,10 @@ class ComposerStaticInite826c805ad9d86a5a0e8e2e99d16cea9
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
         ),
+        'B' => 
+        array (
+            'BonSDK\\Events\\' => 14,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -47,6 +51,10 @@ class ComposerStaticInite826c805ad9d86a5a0e8e2e99d16cea9
         'GuzzleHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+        ),
+        'BonSDK\\Events\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
         ),
     );
 
