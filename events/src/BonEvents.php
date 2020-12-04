@@ -31,6 +31,10 @@ class BonEvents {
                 'base_uri' => $base_URI
             ]);
 
+            if (app()->environment('dev')) {
+                $params['verify'] = false;
+            }
+
             $params['event_name']       = $eventName;
             $params['event_object_id']  = $eventObjectId;
 
