@@ -1,6 +1,6 @@
 <?php
 
-namespace BonApp\Events;
+namespace BonSDK\Events;
 
 use Exception;
 use GuzzleHttp\Client;
