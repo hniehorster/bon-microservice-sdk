@@ -61,8 +61,8 @@ class BonEvents {
                 $params['verify'] = false;
             }
 
-            $params['event_name']       = $this->eventName;
-            $params['event_object_id']  = $this->eventObjectId;
+            $params['form_params']['event_name']       = $this->eventName;
+            $params['form_params']['event_object_id']  = $this->eventObjectId;
 
             $response = $client->request('POST', '/'.$this->locale.'/event', $params);
 
