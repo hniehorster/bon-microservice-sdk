@@ -112,7 +112,6 @@ class BonEvents {
     private function getMessageBusSecret() : string {
 
         $this->messageBusSecret = env('MESSAGEBUS_SECRET');
-
         return $this->messageBusSecret;
     }
 
