@@ -12,6 +12,7 @@ class BonEvents {
     protected $eventName   = null;
     protected $eventObjectId   = null;
     protected $messageBusBaseURI;
+    protected $messageBusSecret;
 
     /**
      * @param null $eventName
@@ -49,16 +50,21 @@ class BonEvents {
         try{
 
             $this->validateParams();
-            $base_URI = $this->getMessageBusBaseURI();
+            $this->getMessageBusBaseURI();
+            $this->getMessageBusSecret();
 
-            Log::info("BaseURI Found: ".$base_URI);
+            Log::info("BaseURI Found: ".$this->messageBusBaseURI);
 
             $client = new Client([
-                'base_uri' => $base_URI
+                'base_uri' => $this->messageBusBaseURI
             ]);
 
             if (app()->environment('dev')) {
                 $params['verify'] = false;
+            }
+
+            if(isset($this->secret)){
+                $headers['Authorization'] = $this->messageBusSecret;
             }
 
             $params['form_params']['event_name']       = $this->eventName;
@@ -99,7 +105,15 @@ class BonEvents {
      * @return string
      */
     private function getMessageBusBaseURI() : string{
-        return $this->messageBusBaseURI = env('MESSAGEBUS_BASE_URI')."/";
+        $this->messageBusBaseURI = env('MESSAGEBUS_BASE_URI')."/";
+        return $this->messageBusBaseURI;
+    }
+
+    private function getMessageBusSecret() : string {
+
+        $this->messageBusSecret = env('MESSAGEBUS_SECRET');
+
+        return $this->messageBusSecret;
     }
 
 }
