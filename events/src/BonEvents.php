@@ -105,13 +105,13 @@ class BonEvents {
      * @return string
      */
     private function getMessageBusBaseURI() : string{
-        $this->messageBusBaseURI = env('MESSAGEBUS_BASE_URI')."/";
+        $this->messageBusBaseURI = env('MESSAGEBUS_SERVICE_BASE_URL')."/";
         return $this->messageBusBaseURI;
     }
 
     private function getMessageBusSecret() : string {
 
-        $this->messageBusSecret = env('MESSAGEBUS_SECRET');
+        $this->messageBusSecret = env('MESSAGEBUS_SERVICE_SECRET');
         return $this->messageBusSecret;
     }
 
