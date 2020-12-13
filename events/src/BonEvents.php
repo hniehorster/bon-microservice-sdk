@@ -53,8 +53,6 @@ class BonEvents {
             $this->getMessageBusBaseURI();
             $this->getMessageBusSecret();
 
-            Log::info("BaseURI Found: ".$this->messageBusBaseURI);
-
             $client = new Client([
                 'base_uri' => $this->messageBusBaseURI
             ]);
@@ -63,16 +61,15 @@ class BonEvents {
                 $params['verify'] = false;
             }
 
-            if(isset($this->secret)){
+            if(isset($this->messageBusSecret)){
                 $headers['Authorization'] = $this->messageBusSecret;
             }
 
             $params['form_params']['event_name']       = $this->eventName;
             $params['form_params']['event_object_id']  = $this->eventObjectId;
+            $params['headers']                         = $headers;
 
             $response = $client->request('POST', '/'.$this->locale.'/event', $params);
-
-            Log::info("ReesponseCode Found: ".$response->getStatusCode());
 
             if($response->getStatusCode() >= 200 ||
                 $response->getStatusCode() < 300
