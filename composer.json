@@ -15,7 +15,8 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "BonSDK\\Events\\": "events/src"
+            "BonSDK\\Events\\": "events/src",
+            "BonSDK\\ApiClient\\": "ApiClient/src"
         }
     }
 }
