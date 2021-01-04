@@ -14,7 +14,7 @@ abstract class BonBase {
     protected $baseURL;
     protected $authToken;
 
-    private function __construct($locale){
+    public function __construct($locale){
         $this->getBaseURL();
         $this->getAuthToken();
 
@@ -29,7 +29,7 @@ abstract class BonBase {
      * @return bool
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function performRequest($method, $endpoint, $data = null) : array {
+    public function performRequest($method, $endpoint, $data = null) {
 
         $this->endpoint = $endpoint;
         $this->method   = $method;
@@ -55,11 +55,14 @@ abstract class BonBase {
 
             $response = $client->request($method, $endpointURI, $params);
 
+
             if($response->getStatusCode() >= 200 ||
                 $response->getStatusCode() < 300
             ) {
-                return $response->getBody();
+                return $response->getBody()->getContents();
             }else{
+
+                Log::error("[INGESTOR] API Gateway responded [".$response->getStatusCode()."]");
                 return false;
             }
         } catch (Exception $e){
@@ -108,7 +111,9 @@ abstract class BonBase {
      */
     protected function validateObjectUUID($uuid) : bool {
 
-        if (preg_match('/^\{?[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}?$/', $uuid)) {
+        $UUIDv4 = '/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i';
+
+        if (preg_match($UUIDv4, $uuid)) {
             return true;
         }else{
             throw new Exception("No valid object UUID provided");

@@ -5,7 +5,7 @@ namespace BonSDK\ApiClient;
 
 use Exception;
 
-class Businesses extends BonBase
+class BonBusinesses extends BonBase
 {
 
     const BUSINESSS_BASE_ENDPOINT = 'businesses';
