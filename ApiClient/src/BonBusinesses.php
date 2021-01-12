@@ -3,12 +3,41 @@
 
 namespace BonSDK\ApiClient;
 
+use BonSDK\ApiClient\Traits\BonGID;
 use Exception;
 
 class BonBusinesses extends BonBase
 {
+    use BonGID;
 
     const BUSINESSS_BASE_ENDPOINT = 'businesses';
+    const OBJECT_TYPE = 'business';
+
+    public $externalObjectId;
+
+    public function __construct($locale, $platform)
+    {
+        parent::__construct($locale, $platform);
+        $this->objectType = self::OBJECT_TYPE;
+    }
+
+    public function setExternalObjectID($externalObjectId){
+        $this->objectID = $externalObjectId;
+    }
+
+    /**
+     * @param array $params
+     * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function index($params = []){
+        $this->getEndpoint();
+
+        $businesses = $this->performRequest('GET', $this->endpoint, $params);
+
+        return $businesses;
+
+    }
 
     /**
      * @param null $businessUUID
@@ -18,10 +47,8 @@ class BonBusinesses extends BonBase
 
         $this->getEndpoint();
 
-        if($businessUUID){
-            if($this->validateObjectUUID($businessUUID)){
-                $this->endpoint .= '/'.$businessUUID;
-            }
+        if($this->validateObjectUUID($businessUUID)){
+            $this->endpoint .= '/'.$businessUUID;
         }
 
         $business = $this->performRequest('GET', $this->endpoint);
@@ -49,16 +76,14 @@ class BonBusinesses extends BonBase
      * @param $params
      * @throws Exception
      */
-    public function update($businessUUID, $params){
+    public function update($businessUUID, $params =[]){
 
         $this->validateObjectUUID($businessUUID);
 
         $this->getEndpoint();
 
-        if($businessUUID){
-            if($this->validateObjectUUID($businessUUID)){
-                $this->endpoint .= '/'.$businessUUID;
-            }
+        if($this->validateObjectUUID($businessUUID)){
+            $this->endpoint .= '/'.$businessUUID;
         }
 
         $business = $this->performRequest('PUT', $this->endpoint, $params);

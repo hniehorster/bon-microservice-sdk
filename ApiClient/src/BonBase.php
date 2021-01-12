@@ -11,14 +11,33 @@ abstract class BonBase {
     public $method;
     public $locale;
     public $endpoint;
+    public $platform;
+    public $businessUUID;
     protected $baseURL;
     protected $authToken;
 
-    public function __construct($locale){
+    /**
+     * BonBase constructor.
+     * @param $locale
+     * @param $platform
+     * @throws Exception
+     */
+    public function __construct($locale, $platform){
         $this->getBaseURL();
         $this->getAuthToken();
 
-        $this->locale = $locale;
+        $this->locale   = $locale;
+
+        $this->validatePlatforms($platform);
+
+        $this->platform = $platform;
+    }
+
+    /**
+     * @param $businessUUID
+     */
+    public function setBusinessUUID($businessUUID){
+        $this->businessUUID = $businessUUID;
     }
 
     /**
@@ -61,7 +80,6 @@ abstract class BonBase {
             ) {
                 return $response->getBody()->getContents();
             }else{
-
                 Log::error("[INGESTOR] API Gateway responded [".$response->getStatusCode()."]");
                 return false;
             }
@@ -108,6 +126,7 @@ abstract class BonBase {
     /**
      * @param $uuid
      * @return bool
+     * @throws Exception
      */
     protected function validateObjectUUID($uuid) : bool {
 
@@ -118,6 +137,23 @@ abstract class BonBase {
         }else{
             throw new Exception("No valid object UUID provided");
         }
+    }
+
+    /**
+     * @param $platformName
+     * @return bool
+     * @throws Exception
+     */
+    protected function validatePlatforms($platformName){
+
+        $allowedPlatforms = ['shopify', 'LightspeedEcom', 'LightspeedRetail', 'CCV', 'MagentoV1', 'MagentoV2', 'MijnWebwinkel', 'Square', 'BigCommerce'];
+
+        if(in_array($platformName, $allowedPlatforms)){
+            return true;
+        }else{
+            throw new Exception("No valid Platform provided");
+        }
+
     }
 
 }

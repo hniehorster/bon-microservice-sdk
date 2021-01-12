@@ -71,6 +71,8 @@ class BonEvents {
 
             $response = $client->request('POST', '/'.$this->locale.'/event', $params);
 
+            Log::info("Params: " . json_encode($params));
+
             if($response->getStatusCode() >= 200 ||
                 $response->getStatusCode() < 300
             ){
