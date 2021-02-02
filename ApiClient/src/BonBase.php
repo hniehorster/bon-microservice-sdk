@@ -11,7 +11,6 @@ abstract class BonBase {
     public $method;
     public $locale;
     public $endpoint;
-    public $platform;
     public $businessUUID;
     protected $baseURL;
     protected $authToken;
@@ -19,18 +18,13 @@ abstract class BonBase {
     /**
      * BonBase constructor.
      * @param $locale
-     * @param $platform
      * @throws Exception
      */
-    public function __construct($locale, $platform){
+    public function __construct($locale){
         $this->getBaseURL();
         $this->getAuthToken();
 
         $this->locale   = $locale;
-
-        $this->validatePlatforms($platform);
-
-        $this->platform = $platform;
     }
 
     /**
@@ -48,7 +42,7 @@ abstract class BonBase {
      * @return bool
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function performRequest($method, $endpoint, $data = null) {
+    public function performRequest($method, $endpoint, $data = null) : array {
 
         $this->endpoint = $endpoint;
         $this->method   = $method;
@@ -78,7 +72,7 @@ abstract class BonBase {
             if($response->getStatusCode() >= 200 ||
                 $response->getStatusCode() < 300
             ) {
-                return $response->getBody()->getContents();
+                return json_decode($response->getBody()->getContents(), true);
             }else{
                 Log::error("[INGESTOR] API Gateway responded [".$response->getStatusCode()."]");
                 return false;
@@ -124,11 +118,11 @@ abstract class BonBase {
     }
 
     /**
-     * @param $uuid
+     * @param string $uuid
      * @return bool
      * @throws Exception
      */
-    protected function validateObjectUUID($uuid) : bool {
+    protected function validateObjectUUID(string $uuid) : bool {
 
         $UUIDv4 = '/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i';
 
@@ -140,11 +134,18 @@ abstract class BonBase {
     }
 
     /**
+     * @param $externalObjectId
+     */
+    public function setExternalObjectID($externalObjectId){
+        $this->objectID = $externalObjectId;
+    }
+
+    /**
      * @param $platformName
      * @return bool
      * @throws Exception
      */
-    protected function validatePlatforms($platformName){
+    protected function validatePlatforms($platformName) : bool{
 
         $allowedPlatforms = ['shopify', 'LightspeedEcom', 'LightspeedRetail', 'CCV', 'MagentoV1', 'MagentoV2', 'MijnWebwinkel', 'Square', 'BigCommerce'];
 

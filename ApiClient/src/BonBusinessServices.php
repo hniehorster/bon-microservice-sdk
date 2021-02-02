@@ -1,6 +1,5 @@
 <?php
 
-
 namespace BonSDK\ApiClient;
 
 use Exception;
@@ -8,21 +7,31 @@ use Exception;
 class BonBusinessServices extends BonBase
 {
     const BUSINESSS_BASE_ENDPOINT = 'businesses-services';
-    const OBJECT_TYPE = 'order-service';
+    const OBJECT_TYPE = 'business-service';
 
+    /**
+     * BonBusinessServices constructor.
+     * @param $locale
+     * @param $platform
+     * @param $businessUUID
+     * @throws Exception
+     */
+    public function __construct($locale, $platform, $businessUUID)
+    {
+        parent::__construct($locale, $platform);
+        $this->objectType = self::OBJECT_TYPE;
+        $this->businessUUID = $businessUUID;
+        $this->getEndpoint();
+    }
 
     /**
      * @param array $params
      * @return array|bool
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function create($params = []){
-
-        $this->getEndpoint();
-
-        $business = $this->performRequest('POST', $this->endpoint, $params);
-
-        return $business;
+    public function create($params = []) : array
+    {
+        return $this->performRequest('POST', $this->endpoint, $params);
     }
 
     /**
@@ -30,16 +39,17 @@ class BonBusinessServices extends BonBase
      * @param $params
      * @throws Exception
      */
-    public function update($businessServiceId, $params =[]){
+    public function update($businessServiceId = null, $params =[]) : array
+    {
 
         $this->getEndpoint();
 
-        $this->endpoint .= '/'.$businessServiceId;
+        if ($this->validateObjectUUID($businessServiceId))
+        {
+            $this->endpoint .= '/'.$businessServiceId;
+        }
 
-        $business = $this->performRequest('PUT', $this->endpoint, $params);
-
-        return $business;
-
+        return $this->performRequest('PUT', $this->endpoint, $params);
     }
 
     /**
@@ -47,14 +57,14 @@ class BonBusinessServices extends BonBase
      * @return array|bool
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function delete($businessServiceId){
+    public function delete($businessServiceId = null) : array
+    {
+        if ($this->validateObjectUUID($businessServiceId))
+        {
+            $this->endpoint .= '/'.$businessServiceId;
+        }
 
-        $this->getEndpoint();
-        $this->endpoint .= '/'.$businessServiceId;
-
-        $business = $this->performRequest('DELETE', $this->endpoint);
-
-        return $business;
+        return $this->performRequest('DELETE', $this->endpoint);
     }
 
     /**
